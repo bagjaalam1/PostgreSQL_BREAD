@@ -65,7 +65,7 @@ module.exports = function (db) {
       sql += ` WHERE ${wheres.join(' and ')}`
     }
 
-    db.all(sql, values, (err, data) => {
+    pool.query(sql, values, (err, data) => {
       const pages = Math.ceil(data[0].total / limit)
       console.log(data)
       console.log(sql)
@@ -77,7 +77,7 @@ module.exports = function (db) {
       }
       sql += ' LIMIT ? OFFSET ?'
 
-      db.all(sql, [...values, limit, offset], (err, data) => {
+      pool.query(sql, [...values, limit, offset], (err, data) => {
         res.render('list', { rows: data, page, pages, moment, url, query: req.query }) //kirim ke depan
       })
     })
@@ -88,7 +88,7 @@ module.exports = function (db) {
   })
 
   router.post('/add', (req, res) => {
-    db.run('INSERT INTO breads (stringdata, integerdata, floatdata, datedata, booleandata) VALUES (?,?,?,?,?)',
+    pool.query('INSERT INTO breads (stringdata, integerdata, floatdata, datedata, booleandata) VALUES (?,?,?,?,?)',
       [req.body.stringdata, req.body.integerdata, req.body.floatdata, req.body.datedata, req.body.booleandata],
       (err) => {
         if (err) return res.send(err)
@@ -97,7 +97,7 @@ module.exports = function (db) {
   })
 
   router.get('/edit/:id', (req, res) => {
-    db.all('SELECT * FROM breads', [], (err, data) => {
+    pool.query('SELECT * FROM breads', [], (err, data) => {
       console.log(data)
       console.log(req.params.id)
       res.render('edit', { item: data[req.params.id - 1] })
@@ -106,7 +106,7 @@ module.exports = function (db) {
 
   router.post('/edit/:id', (req, res) => {
     console.log(parseInt(req.body.id))
-    db.run(`UPDATE breads SET 
+    pool.query(`UPDATE breads SET 
     stringdata = ?,
     integerdata = ?,
     floatdata = ?,
@@ -127,7 +127,7 @@ module.exports = function (db) {
   })
 
   router.get('/delete/:id', (req, res) => {
-    db.run('DELETE FROM breads WHERE id=?', [req.params.id], (err) => {
+    pool.query('DELETE FROM breads WHERE id=?', [req.params.id], (err) => {
       if (err) return res.send(err)
       res.redirect('/')
     })
