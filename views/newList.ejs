@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POSTGRESQL-BREADS</title>
+
+    <link rel="stylesheet" , href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <h1 class="judul">Filter</h1>
+
+    <div class="container">
+        <form action="" method="get">
+            <input type="hidden" name="page" value="1">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="string">String</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="string" name="stringdata" placeholder="String" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="integer">Integer</label>
+
+                <div class="col-sm-10">
+                    <input class="form-control" type="number" id="integer" name="integerdata" placeholder="Integer" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="float">Float</label>
+
+                <div class="col-sm-10">
+                    <input class="form-control" type="number" id="float" step="any" name="floatdata" placeholder="Float" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="date">Date</label>
+
+                <div class="col-sm-10">
+                    <input class="form-control" type="date" id="date" name="startDate" placeholder="start date" value="">
+                    <br>
+                    to <br>
+                    <input class="form-control" type="date" id="date" name="endDate" placeholder="end date" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="boolean">Boolean</label>
+
+                <div class="col-sm-10">
+                    <select name="booleandata" id="boolean">
+                        <option value="" disabled selected hidden>Choose the boolean ...</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+
+    <br>
+    <a class="add" href="/add">Tambah</a>
+    
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>String</th>
+                <th>Integer </th>
+                <th>Float</th>
+                <th>Date</th>
+                <th>Boolean</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        
+    </table>
+</body>
+
+</html>
