@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POSTGRESQL-BREADS</title>
+</head>
+<body>
+    <h1 class="judul">Add Data</h1>
+
+    <div class="container">
+        <form action="" method="post">
+            <div class="row">
+                <div class="col-25">
+                    <label for="string">String</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="string" name="stringdata" placeholder="String">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="integer">Integer</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="integer" name="integerdata" placeholder="Integer">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="float">Float</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="float" step="any" name="floatdata" placeholder="Float">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="date">Date</label>
+                </div>
+                <div class="col-75">
+                    <input type="date" id="date" name="datedata" placeholder="end date">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="boolean">Boolean</label>
+                </div>
+                <div class="col-75">
+                    <select name="booleandata" id="boolean">
+                        <option value="" disabled selected hidden>Choose the boolean ...</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

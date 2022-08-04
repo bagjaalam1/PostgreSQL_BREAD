@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POSTGRESQL-BREADS</title>
+</head>
+<body>
+    <h1 class="judul">Edit Data</h1>
+
+    <div class="container">
+        <form action="" method="post">
+            <div class="row">
+                <div class="col-25">
+                    <label for="string">ID</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="string" name="id" placeholder="ID" value="<%= item['id '] %>" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="string">String</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="string" name="stringdata" placeholder="String" value="<%=item.stringdata%>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="integer">Integer</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="integer" name="integerdata" placeholder="Integer" value="<%=item.integerdata%>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="float">Float</label>
+                </div>
+                <div class="col-75">
+                    <input type="number" id="float" step="any" name="floatdata" placeholder="Float" value="<%=item.floatdata%>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="date">Date</label>
+                </div>
+                <div class="col-75">
+                    <input type="date" id="date" name="datedata" placeholder="end date" value="<%=item.datedata%>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="boolean">Boolean</label>
+                </div>
+                <div class="col-75">
+                    <select name="booleandata" id="boolean" value="<%=item.booleandata%>">
+                        <option value="" disabled selected hidden>Choose the boolean ...</option>
+                        <option value="true" <%=item.booleandata=='true' ? 'selected' : null %> >True</option>
+                        <option value="false" <%=item.booleandata=='false' ? 'selected' : null %> >False</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -6,6 +6,15 @@ const path = require('path')
 const moment = require('moment')
 moment.locale('id')
 const db = require('../db/db.js')
+const { Pool } = require('pg')
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT
+});
 
 // client.connect();
 
@@ -71,23 +80,24 @@ router.get('/', (req, res) => {
   if (wheres.length > 0) {
     sql += ` WHERE ${wheres.join(' and ')}`
   }
+  console.log(sql)
+  console.log(values)
 
-  db.query(sql, values, (err, data) => {
-    if (err) return res.send(err)
-    const pages = Math.ceil(data[0].total / limit)
-    console.log(data)
-    console.log(sql)
-    console.log(values)
-    console.log(req.query)
+  pool.query(sql, values, (err, data) => {
+    const pages = Math.ceil(data.rows[0].total / limit)
     sql = 'SELECT * FROM public.breads'
     if (wheres.length > 0) {
       sql += ` WHERE ${wheres.join(' and ')}`
     }
     sql += ` limit ${limit} offset ${offset}`
 
-    db.query(sql, [...values, limit, offset], (err, data) => {
+    console.log(sql)
+    console.log(values)
+    console.log(limit, offset)
+
+    pool.query(sql, [...values], (err, data) => {
       if (err) return res.send(err)
-      res.render('newList', { rows: data, page, pages, moment, url, query: req.query }) //kirim ke depan
+      res.render('newList', { rows: data.rows, page, pages, moment, url, query: req.query }) //kirim ke depan
     })
   })
   // const url = req.url == '/' ? '/?page=1' : req.url
@@ -141,7 +151,7 @@ router.get('/', (req, res) => {
   //   sql += ` WHERE ${wheres.join(' and ')}`
   // }
 
-  // db.query(sql, values, (err, data) => {
+  // pool.query(sql, values, (err, data) => {
   //   const pages = Math.ceil(data[0].total / limit)
   //   console.log(data)
   //   console.log(sql)
@@ -153,18 +163,18 @@ router.get('/', (req, res) => {
   //   }
   //   sql += ' LIMIT ? OFFSET ?'
 
-  //   db.query(sql, [...values, limit, offset], (err, data) => {
+  //   pool.query(sql, [...values, limit, offset], (err, data) => {
   //     res.render('list', { rows: data, page, pages, moment, url, query: req.query }) //kirim ke depan
   //   })
   // })
 })
 
 router.get('/add', (req, res) => {
-  res.render('add')
+  res.render('newAdd')
 })
 
 router.post('/add', (req, res) => {
-  db.query('INSERT INTO public.c21 (stringdata, integerdata, floatdata, datedata, booleandata) VALUES (?,?,?,?,?)',
+  pool.query('insert into public.breads(stringdata, integerdata, floatdata, datedata, booleandata) values ($1, $2, $3, $4, $5)',
     [req.body.stringdata, req.body.integerdata, req.body.floatdata, req.body.datedata, req.body.booleandata],
     (err) => {
       if (err) return res.send(err)
@@ -173,16 +183,16 @@ router.post('/add', (req, res) => {
 })
 
 router.get('/edit/:id', (req, res) => {
-  db.query('SELECT * FROM public.c21', [], (err, data) => {
+  pool.query('select * from public.breads where id = $1', [], (err, data) => {
     console.log(data)
     console.log(req.params.id)
-    res.render('edit', { item: data[req.params.id - 1] })
+    res.render('newEdit', { item: data[req.params.id - 1] })
   })
 })
 
 router.post('/edit/:id', (req, res) => {
   console.log(parseInt(req.body.id))
-  db.query(`UPDATE public.c21 SET 
+  pool.query(`UPDATE public.c21 SET 
     stringdata = ?,
     integerdata = ?,
     floatdata = ?,
@@ -203,7 +213,7 @@ router.post('/edit/:id', (req, res) => {
 })
 
 router.get('/delete/:id', (req, res) => {
-  db.query('DELETE FROM public.c21 WHERE id=?', [req.params.id], (err) => {
+  pool.query('DELETE FROM public.c21 WHERE id=?', [req.params.id], (err) => {
     if (err) return res.send(err)
     res.redirect('/')
   })
