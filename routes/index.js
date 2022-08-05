@@ -95,6 +95,8 @@ router.get('/', (req, res) => {
     console.log(`sql tampil data: ${sql}`)
     pool.query(sql, [...values], (err, data) => {
       if (err) return res.send(err)
+      console.log(page)
+      console.log(pages)
       res.render('newList', { rows: data.rows, page, pages, moment, url, query: req.query }) //kirim ke depan
     })
   })

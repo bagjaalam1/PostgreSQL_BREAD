@@ -8,14 +8,15 @@
     <title>POSTGRESQL-BREADS</title>
 
     <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
-    <h1 class="judul">Filter</h1>
-
+    <div class="card-header">
+        <h2>Filters</h2>
+    </div>
     <div class="container">
         <form action="" method="get">
             <input type="hidden" name="page" value="1" />
@@ -30,7 +31,8 @@
             <div class="form-group">
                 <label class="control-label col-sm-2" for="string">String</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" id="string" name="stringdata" placeholder="String" value="<%=query.stringdata%>">
+                    <input class="form-control" type="text" id="string" name="stringdata" placeholder="String"
+                        value="<%=query.stringdata%>">
                 </div>
             </div>
             <div class="form-group">
@@ -57,7 +59,8 @@
                         value="<%=query.startDate%>">
                     <br>
                     to <br>
-                    <input class="form-control" type="date" id="date" name="endDate" placeholder="end date" value="<%=query.endDate%>">
+                    <input class="form-control" type="date" id="date" name="endDate" placeholder="end date"
+                        value="<%=query.endDate%>">
                 </div>
             </div>
             <div class="form-group">
@@ -66,8 +69,8 @@
                 <div class="col-sm-10">
                     <select name="booleandata" id="boolean">
                         <option value="" disabled selected hidden>Choose the boolean ...</option>
-                        <option value="true" <%=rows.booleandata == true ? 'selected' : null %>>True</option>
-                        <option value="false" <%=rows.booleandata == false ? 'selected' : null %>>False</option>
+                        <option value="true" <%=rows.booleandata==true ? 'selected' : null %>>True</option>
+                        <option value="false" <%=rows.booleandata==false ? 'selected' : null %>>False</option>
                     </select>
                 </div>
             </div>
@@ -82,7 +85,7 @@
     <a class="add" href="/add">Tambah</a>
 
 
-    <table class="tabble tabble-stripped">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -116,8 +119,8 @@
                         <%= item.booleandata %>
                     </td>
                     <td>
-                        <a class="edit" href="/edit/<%= item.id%>">Edit</a>
-                        <a class="delete" href="/delete/<%= item.id%>">Hapus</a>
+                        <a class="btn btn-success" href="/edit/<%= item.id%>">Edit</a>
+                        <a class="btn btn-danger" href="/delete/<%= item.id%>">Hapus</a>
                     </td>
                 </tr>
                 <% }) %>
@@ -126,20 +129,25 @@
 
     </table>
 
-    <div>
-        <a
-            href="<%= url.replace(`page=${page}`, `page=${(parseInt(page) - 1) <= 0 ? 1 : parseInt(page-1) }` ) %>">Previous</a>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item<%=page == 1 ? ' disabled' : '' %>">
+                <a class="page-link"
+                    href="<%= url.replace(`page=${page}`, `page=${(parseInt(page) - 1) <= 0 ? 1 : parseInt(page-1) }` ) %>">Previous</a>
+            </li>
+            <% for( let i=1; i <=pages; i++ ) { %>
+                <li class="page-item<%=page==i ? ' active' : '' %>"><a class="page-link"
+                        href="<%=url.replace(`page=${page}`, `page=${i}`)%>">
+                        <%= i %>
+                    </a></li>
+                <% } %>
+                    <li class="page-item<%=page == pages ? ' disabled' : '' %>">
+                        <a class="page-link"
+                            href="<%= url.replace(`page=${page}`, `page=${(parseInt(page) + 1) > pages ? pages : (parseInt(page)+1) }` ) %>">Next</a>
+                    </li>
+        </ul>
+    </nav>
 
-        <%for (let i=1; i <=pages; i++) { %>
-            <a class="<%= page == i ? 'active' : '' %>" href="<%=url.replace(`page=${page}`, `page=${i}`)%>">
-                <%= i%>
-            </a>
-            <% } %>
-
-                <a
-                    href="<%= url.replace(`page=${page}`, `page=${(parseInt(page) + 1) > pages ? pages : (parseInt(page)+1) }` ) %>">Next</a>
-
-    </div>
     <br>
     <a class="add" href="/add">Tambah</a>
 </body>
