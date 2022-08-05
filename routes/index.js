@@ -6,7 +6,8 @@ const path = require('path')
 const moment = require('moment')
 moment.locale('id')
 const db = require('../db/db.js')
-const { Pool } = require('pg')
+const { Pool } = require('pg');
+const { query } = require('../db/db.js');
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -27,17 +28,21 @@ const pool = new Pool({
 
 router.get('/', (req, res) => {
 
+  const field = ['id', 'stringdata', 'integerdata', 'floatdata', 'datedata', 'booleandata'];
+
+  const sortBy = field.includes(req.query.sortBy) ? req.query.sortBy : 'id';
+  const sortMode = req.query.sortMode === 'desc' ? 'desc' : 'asc';
+
+  const url = req.url == '/' ? '/?page=1&sortBy=id&sortMode=asc' : req.url;
+  req.query.sortBy = sortBy;
+  req.query.sortMode = sortMode;
+
   const page = req.query.page || 1
   const limit = 3
   const offset = (page - 1) * limit
   const wheres = []
   const values = []
   const count = 1
-
-  // const field = ['id', 'stringdata', 'integerdata', 'floatdata', 'datedata', 'booleandata']
-
-  // const sortBy = field.includes(req.query.sortBy) ? req.query.sortBy : 'id';
-  // const sortMode = req.query.sortMode === 'desc' ? 'desc' : 'asc';
 
   //pencarian
   if (req.query.id) {
@@ -89,84 +94,13 @@ router.get('/', (req, res) => {
     if (wheres.length > 0) {
       sql += ` WHERE ${wheres.join(' and ')}`
     }
-    sql += ` limit ${limit} offset ${offset}`
-
-    console.log(sql)
-    console.log(values)
-    console.log(limit, offset)
+    sql += ` ORDER BY ${sortBy} ${sortMode} LIMIT ${limit} OFFSET ${offset}`
 
     pool.query(sql, [...values], (err, data) => {
       if (err) return res.send(err)
       res.render('newList', { rows: data.rows, page, pages, moment, url, query: req.query }) //kirim ke depan
     })
   })
-  // const url = req.url == '/' ? '/?page=1' : req.url
-  // console.log(url)
-
-  // const page = req.query.page || 1
-  // const limit = 3
-  // const offset = (page - 1) * limit
-  // const wheres = []
-  // const values = []
-
-  // //pencarian
-  // if (req.query.id) {
-  //   wheres.push(`id = ?`)
-  //   values.push(req.query.id)
-  // }
-
-  // if (req.query.stringdata) {
-  //   wheres.push(`stringdata like '%' || ? || '%'`)
-  //   values.push(req.query.stringdata)
-  // }
-
-  // if (req.query.integerdata) {
-  //   wheres.push(`integerdata = ?`)
-  //   values.push(req.query.integerdata)
-  // }
-
-  // if (req.query.floatdata) {
-  //   wheres.push(`floatdata = ?`)
-  //   values.push(req.query.floatdata)
-  // }
-
-  // if (req.query.booleandata) {
-  //   wheres.push(`booleandata = ?`)
-  //   values.push(req.query.booleandata)
-  // }
-  // if (req.query.startDate && req.query.endDate) {
-  //   wheres.push('datedata >= ? and datedata <= ?')
-  //   values.push(req.query.startDate)
-  //   values.push(req.query.endDate)
-  // } else if (req.query.startDate) {
-  //   wheres.push('datedata >= ?')
-  //   values.push(req.query.startDate)
-  // } else if (req.query.endDate) {
-  //   wheres.push('datedata <= ?')
-  //   values.push(req.query.endDate)
-  // }
-
-  // let sql = 'SELECT COUNT(*) AS total FROM public.c21'
-  // if (wheres.length > 0) {
-  //   sql += ` WHERE ${wheres.join(' and ')}`
-  // }
-
-  // pool.query(sql, values, (err, data) => {
-  //   const pages = Math.ceil(data[0].total / limit)
-  //   console.log(data)
-  //   console.log(sql)
-  //   console.log(values)
-  //   console.log(req.query)
-  //   sql = 'SELECT * FROM public.c21'
-  //   if (wheres.length > 0) {
-  //     sql += ` WHERE ${wheres.join(' and ')}`
-  //   }
-  //   sql += ' LIMIT ? OFFSET ?'
-
-  //   pool.query(sql, [...values, limit, offset], (err, data) => {
-  //     res.render('list', { rows: data, page, pages, moment, url, query: req.query }) //kirim ke depan
-  //   })
-  // })
 })
 
 router.get('/add', (req, res) => {
@@ -183,37 +117,30 @@ router.post('/add', (req, res) => {
 })
 
 router.get('/edit/:id', (req, res) => {
-  pool.query('select * from public.breads where id = $1', [], (err, data) => {
-    console.log(data)
+  pool.query('select * from public.breads where id = $1', [req.params.id], (err, data) => {
+    console.log(data.rows)
     console.log(req.params.id)
-    res.render('newEdit', { item: data[req.params.id - 1] })
+    res.render('newEdit', { item: data.rows[0] })
   })
 })
 
 router.post('/edit/:id', (req, res) => {
-  console.log(parseInt(req.body.id))
-  pool.query(`UPDATE public.c21 SET 
-    stringdata = ?,
-    integerdata = ?,
-    floatdata = ?,
-    datedata = ?,
-    booleandata = ?
-    WHERE id = ?`,
+  pool.query(`UPDATE public.breads SET 
+    stringdata = $1,
+    integerdata = $2,
+    floatdata = $3,
+    datedata = $4,
+    booleandata = $5
+    WHERE id = $6`,
     [req.body.stringdata, req.body.integerdata, req.body.floatdata, req.body.datedata, req.body.booleandata, req.body.id],
     (err) => {
-      console.log(req.body.stringdata)
-      console.log(req.body.integerdata)
-      console.log(req.body.floatdata)
-      console.log(req.body.datedata)
-      console.log(req.body.booleandata)
-      console.log(req.body.id)
       if (err) return res.send(err)
       res.redirect('/')
     })
 })
 
 router.get('/delete/:id', (req, res) => {
-  pool.query('DELETE FROM public.c21 WHERE id=?', [req.params.id], (err) => {
+  pool.query('DELETE FROM public.breads WHERE id= $1', [req.params.id], (err) => {
     if (err) return res.send(err)
     res.redirect('/')
   })

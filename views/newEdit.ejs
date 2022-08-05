@@ -56,10 +56,11 @@
                     <label for="boolean">Boolean</label>
                 </div>
                 <div class="col-75">
-                    <select name="booleandata" id="boolean" value="<%=item.booleandata%>">
+                    <select name="booleandata" id="boolean"">
                         <option value="" disabled selected hidden>Choose the boolean ...</option>
-                        <option value="true" <%=item.booleandata=='true' ? 'selected' : null %> >True</option>
-                        <option value="false" <%=item.booleandata=='false' ? 'selected' : null %> >False</option>
+                        <option value="true" <%=item.booleandata == true ? 'selected' : null %>>True</option>
+                        <option value="false"<%=item.booleandata == false ? 'selected' : null %>>False</option>
+                        
                     </select>
                 </div>
             </div>
