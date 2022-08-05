@@ -18,35 +18,46 @@
 
     <div class="container">
         <form action="" method="get">
-            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="page" value="1" />
+            <input type="hidden" name="sortBy" value="id" />
+            <input type="hidden" name="sortMode" value="asc" />
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="id">ID</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="id" name="id" placeholder="ID" value="<%=query.id%>">
+                </div>
+            </div>
             <div class="form-group">
                 <label class="control-label col-sm-2" for="string">String</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" id="string" name="stringdata" placeholder="String" value="">
+                    <input class="form-control" type="text" id="string" name="stringdata" placeholder="String" value="<%=query.stringdata%>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2" for="integer">Integer</label>
 
                 <div class="col-sm-10">
-                    <input class="form-control" type="number" id="integer" name="integerdata" placeholder="Integer" value="">
+                    <input class="form-control" type="number" id="integer" name="integerdata" placeholder="Integer"
+                        value="<%=query.integerdata%>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2" for="float">Float</label>
 
                 <div class="col-sm-10">
-                    <input class="form-control" type="number" id="float" step="any" name="floatdata" placeholder="Float" value="">
+                    <input class="form-control" type="number" id="float" step="any" name="floatdata" placeholder="Float"
+                        value="<%=query.floatdata%>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2" for="date">Date</label>
 
                 <div class="col-sm-10">
-                    <input class="form-control" type="date" id="date" name="startDate" placeholder="start date" value="">
+                    <input class="form-control" type="date" id="date" name="startDate" placeholder="start date"
+                        value="<%=query.startDate%>">
                     <br>
                     to <br>
-                    <input class="form-control" type="date" id="date" name="endDate" placeholder="end date" value="">
+                    <input class="form-control" type="date" id="date" name="endDate" placeholder="end date" value="<%=query.endDate%>">
                 </div>
             </div>
             <div class="form-group">
@@ -55,8 +66,8 @@
                 <div class="col-sm-10">
                     <select name="booleandata" id="boolean">
                         <option value="" disabled selected hidden>Choose the boolean ...</option>
-                        <option value="true">True</option>
-                        <option value="false">False</option>
+                        <option value="true" <%=rows.booleandata == true ? 'selected' : null %>>True</option>
+                        <option value="false" <%=rows.booleandata == false ? 'selected' : null %>>False</option>
                     </select>
                 </div>
             </div>
@@ -69,7 +80,7 @@
 
     <br>
     <a class="add" href="/add">Tambah</a>
-    
+
 
     <table class="tabble tabble-stripped">
         <thead>
@@ -112,8 +123,23 @@
                 <% }) %>
         </tbody>
 
-        
+
     </table>
+
+    <div>
+        <a
+            href="<%= url.replace(`page=${page}`, `page=${(parseInt(page) - 1) <= 0 ? 1 : parseInt(page-1) }` ) %>">Previous</a>
+
+        <%for (let i=1; i <=pages; i++) { %>
+            <a class="<%= page == i ? 'active' : '' %>" href="<%=url.replace(`page=${page}`, `page=${i}`)%>">
+                <%= i%>
+            </a>
+            <% } %>
+
+                <a
+                    href="<%= url.replace(`page=${page}`, `page=${(parseInt(page) + 1) > pages ? pages : (parseInt(page)+1) }` ) %>">Next</a>
+
+    </div>
     <br>
     <a class="add" href="/add">Tambah</a>
 </body>

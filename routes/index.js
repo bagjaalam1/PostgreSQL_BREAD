@@ -17,13 +17,6 @@ const pool = new Pool({
   port: process.env.DB_PORT
 });
 
-// client.connect();
-
-// client.query('select * from public.c21', (err, data) => {
-//   if (err) return console.log(err.message)
-//   console.log(data.rows)
-// })
-
 /* GET home page. */
 
 router.get('/', (req, res) => {
@@ -42,11 +35,11 @@ router.get('/', (req, res) => {
   const offset = (page - 1) * limit
   const wheres = []
   const values = []
-  const count = 1
+  let count = 1
 
   //pencarian
   if (req.query.id) {
-    wheres.push(`id = $${count++} `)
+    wheres.push(`id = $${count++}`)
     values.push(req.query.id)
   }
 
@@ -74,10 +67,10 @@ router.get('/', (req, res) => {
     values.push(req.query.startDate)
     values.push(req.query.endDate)
   } else if (req.query.startDate) {
-    wheres.push(`datedata between $${count++} and (select max(date) from public.breads)`)
+    wheres.push(`datedata between $${count++} and (select max(datedata) from public.breads)`)
     values.push(req.query.startDate)
   } else if (req.query.endDate) {
-    wheres.push(`datedata between (select min(date) from public.breads) and $${count++}`)
+    wheres.push(`datedata between (select min(datedata) from public.breads) and $${count++}`)
     values.push(req.query.endDate)
   }
 
@@ -85,10 +78,13 @@ router.get('/', (req, res) => {
   if (wheres.length > 0) {
     sql += ` WHERE ${wheres.join(' and ')}`
   }
-  console.log(sql)
-  console.log(values)
+
+  console.log(`values: ${values}`)
+  console.log(`wheres: ${wheres}`)
+  console.log(`sql: ${sql}`)
 
   pool.query(sql, values, (err, data) => {
+    console.log(data.rows)
     const pages = Math.ceil(data.rows[0].total / limit)
     sql = 'SELECT * FROM public.breads'
     if (wheres.length > 0) {
@@ -96,6 +92,7 @@ router.get('/', (req, res) => {
     }
     sql += ` ORDER BY ${sortBy} ${sortMode} LIMIT ${limit} OFFSET ${offset}`
 
+    console.log(`sql tampil data: ${sql}`)
     pool.query(sql, [...values], (err, data) => {
       if (err) return res.send(err)
       res.render('newList', { rows: data.rows, page, pages, moment, url, query: req.query }) //kirim ke depan
@@ -118,8 +115,6 @@ router.post('/add', (req, res) => {
 
 router.get('/edit/:id', (req, res) => {
   pool.query('select * from public.breads where id = $1', [req.params.id], (err, data) => {
-    console.log(data.rows)
-    console.log(req.params.id)
     res.render('newEdit', { item: data.rows[0] })
   })
 })
