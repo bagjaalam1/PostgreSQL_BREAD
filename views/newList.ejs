@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="/fontawesome/css/all.css" rel="stylesheet">
 
 </head>
 
@@ -107,8 +108,16 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>String</th>
+                <th>
+                    <a href="<%= url.replace(`sortBy=${query.sortBy}`, `sortBy=id`).replace(`sortMode=${query.sortMode}`, `sortMode=${query.sortMode == 'asc' ? 'desc' : 'asc'}`)%>">
+                        <i class="fa-solid fa-<%= query.sortBy == 'id' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> ID
+                    </a>
+                </th>
+                <th>
+                    <a href="<%= url.replace(`sortBy=${query.sortBy}`, `sortBy=stringdata`).replace(`sortMode=${query.sortMode}`, `sortMode=${query.sortMode == 'asc' ? 'desc' : 'asc'}`)%>">
+                        <i class="fa-solid fa-<%= query.sortBy == 'stringdata' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> String
+                    </a>
+                </th>
                 <th>Integer </th>
                 <th>Float</th>
                 <th>Date</th>
