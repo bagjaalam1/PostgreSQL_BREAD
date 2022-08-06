@@ -38,31 +38,31 @@ router.get('/', (req, res) => {
   let count = 1
 
   //pencarian
-  if (req.query.id) {
+  if (req.query.id && req.query.idcheck) {
     wheres.push(`id = $${count++}`)
     values.push(req.query.id)
   }
 
-  if (req.query.stringdata) {
+  if (req.query.stringdata && req.query.stringcheck) {
     wheres.push(`stringdata ilike '%' || $${count++} || '%'`)
     values.push(req.query.stringdata)
   }
 
-  if (req.query.integerdata) {
+  if (req.query.integerdata && req.query.integercheck) {
     wheres.push(`integerdata = $${count++}`)
     values.push(req.query.integerdata)
   }
 
-  if (req.query.floatdata) {
+  if (req.query.floatdata && req.query.floatcheck) {
     wheres.push(`floatdata = $${count++}`)
     values.push(req.query.floatdata)
   }
 
-  if (req.query.booleandata) {
+  if (req.query.booleandata && req.query.booleancheck) {
     wheres.push(`booleandata = $${count++}`)
     values.push(req.query.booleandata)
   }
-  if (req.query.startDate && req.query.endDate) {
+  if (req.query.startDate && req.query.endDate && req.query.datecheck) {
     wheres.push(`datedata between $${count++} and $${count++}`)
     values.push(req.query.startDate)
     values.push(req.query.endDate)
