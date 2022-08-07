@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const cookieParser = require('cookie-parser')
-const url = require('url')
-const path = require('path')
 const moment = require('moment')
 moment.locale('id')
-const db = require('../db/db.js')
 const { Pool } = require('pg');
-const { query } = require('../db/db.js');
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -23,8 +18,11 @@ router.get('/', (req, res) => {
 
   const field = ['id', 'stringdata', 'integerdata', 'floatdata', 'datedata', 'booleandata'];
 
-  const sortBy = field.includes(req.query.sortBy) ? req.query.sortBy : 'id';
-  const sortMode = req.query.sortMode === 'desc' ? 'desc' : 'asc';
+  // const sortBy = field.includes(req.query.sortBy) ? req.query.sortBy : 'id';
+  // const sortMode = req.query.sortMode === 'desc' ? 'desc' : 'asc';
+
+  const sortBy = req.query.sortBy || 'id'
+  const sortMode = req.query.sortMode || 'asc'
 
   const url = req.url == '/' ? '/?page=1&sortBy=id&sortMode=asc' : req.url;
   req.query.sortBy = sortBy;

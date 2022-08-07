@@ -118,10 +118,26 @@
                         <i class="fa-solid fa-<%= query.sortBy == 'stringdata' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> String
                     </a>
                 </th>
-                <th>Integer </th>
-                <th>Float</th>
-                <th>Date</th>
-                <th>Boolean</th>
+                <th>
+                    <a href="<%= url.replace(`sortBy=${query.sortBy}`, `sortBy=integerdata`).replace(`sortMode=${query.sortMode}`, `sortMode=${query.sortMode == 'asc' ? 'desc' : 'asc'}`)%>">
+                        <i class="fa-solid fa-<%= query.sortBy == 'integerdata' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> Integer
+                    </a>
+                </th>
+                <th>
+                    <a href="<%= url.replace(`sortBy=${query.sortBy}`, `sortBy=floatdata`).replace(`sortMode=${query.sortMode}`, `sortMode=${query.sortMode == 'asc' ? 'desc' : 'asc'}`)%>">
+                        <i class="fa-solid fa-<%= query.sortBy == 'floatdata' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> Float
+                    </a>
+                </th>
+                <th>
+                    <a href="<%= url.replace(`sortBy=${query.sortBy}`, `sortBy=datedata`).replace(`sortMode=${query.sortMode}`, `sortMode=${query.sortMode == 'asc' ? 'desc' : 'asc'}`)%>">
+                        <i class="fa-solid fa-<%= query.sortBy == 'datedata' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> Date
+                    </a>
+                </th>
+                <th>
+                    <a href="<%= url.replace(`sortBy=${query.sortBy}`, `sortBy=booleandata`).replace(`sortMode=${query.sortMode}`, `sortMode=${query.sortMode == 'asc' ? 'desc' : 'asc'}`)%>">
+                        <i class="fa-solid fa-<%= query.sortBy == 'booleandata' ? query.sortMode == 'asc' ? 'sort-up' : 'sort-down' : 'sort'%>"></i> Boolean
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
